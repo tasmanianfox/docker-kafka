@@ -1,0 +1,17 @@
+version: '3'
+services:
+  zookeeper:
+    image: zookeeper
+    volumes:
+      - "${ZOOKEEPER_HOST_DATA_DIR}:/data"
+      - "${ZOOKEEPER_HOST_CONFIG_FILE}:/conf/zoo.cfg"
+  kafka:
+    image: tasmanianfox/kafka:${DOCKER_IMAGE}
+    links:
+      - zookeeper
+    ports:
+      - "${KAFKA_PORT-9092}:9092"
+    volumes:
+      - "${KAFKA_HOST_CONFIG_FILE}:/opt/kafka/config/server.properties"
+      - "${KAFKA_HOST_LOG_DIR}:/mnt/kafka-logs"
+    restart: on-failure
